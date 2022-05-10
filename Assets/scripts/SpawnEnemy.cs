@@ -5,17 +5,17 @@ using UnityEngine;
 public class SpawnEnemy : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public GameObject moneyPrefab;
+    //public GameObject moneyPrefab;
     private Vector3 spawnPoint;
     private float zVal, finalXVal;
-    private float xVal = 4;
+    private float xVal = 3;
     private GameObject localPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
         localPlayer = GameObject.Find("Player");
-        InvokeRepeating("SpawnMoney", 1f, 1f);
+        //InvokeRepeating("SpawnMoney", 6.0f, 2.0f);
         InvokeRepeating("SpawnOpp", 2.0f, 2.0f);
     }
 
@@ -26,18 +26,20 @@ public class SpawnEnemy : MonoBehaviour
     }
     public void SpawnOpp()
     {
-        zVal = Random.Range(gameObject.transform.position.z, localPlayer.transform.position.z + 15);
+        zVal = Random.Range(localPlayer.transform.position.z -45, localPlayer.transform.position.z -15);
         finalXVal = Random.Range(-xVal, xVal);
-        spawnPoint = new Vector3(finalXVal, 0.2f, zVal);
+        spawnPoint = new Vector3(finalXVal, 2.1f, zVal);
         GameObject enemy;
         enemy = Instantiate(enemyPrefab, spawnPoint, transform.rotation);
     }
+    /*
     public void SpawnMoney()
     {
-        zVal = Random.Range(gameObject.transform.position.z, localPlayer.transform.position.z + 15);
+        zVal = Random.Range(localPlayer.transform.position.z -25, localPlayer.transform.position.z -15);
         finalXVal = Random.Range(-xVal, xVal);
-        spawnPoint = new Vector3(finalXVal, localPlayer.transform.position.y - 0.75f, zVal);
+        spawnPoint = new Vector3(finalXVal, 2.25f, zVal);
         GameObject money;
         money = Instantiate(moneyPrefab, spawnPoint, transform.rotation);
     }
+    */
 }

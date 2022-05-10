@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviour
         {
             localEnemy = col.gameObject;
             col.gameObject.GetComponent<EnemyMove>().colorChange = true;
+            col.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
             col.gameObject.tag = "EnemyHit";
             StartCoroutine("HitRoutine");
             gameObject.GetComponent<BoxCollider>().enabled = false;
@@ -36,7 +37,7 @@ public class Bullet : MonoBehaviour
     IEnumerator HitRoutine()
     {
         localEnemy.GetComponent<Animator>().SetTrigger("death");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.1f);
         Destroy(localEnemy.GetComponent<EnemyMove>());
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);

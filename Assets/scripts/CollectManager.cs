@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 public class CollectManager : MonoBehaviour
 {
-    private float moveSpeed = 2.5f;
+    private float moveSpeed = 3.0f;
     private GameObject local;
     private void OnTriggerEnter (Collider col)
     {
@@ -16,16 +16,18 @@ public class CollectManager : MonoBehaviour
     }
     IEnumerator Collect()
     {
-        local.gameObject.transform.DOMove(transform.position + Vector3.up * 1.1f, moveSpeed * Time.deltaTime);
-        local.gameObject.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-        yield return new WaitForSeconds(0.2f);
-        local.gameObject.transform.DOMove(transform.position + Vector3.up, moveSpeed * Time.deltaTime);
-        Destroy(gameObject.GetComponent<CollectManager>());
         local.gameObject.AddComponent<CollectManager>();
+        local.gameObject.transform.DOMove(transform.position + Vector3.up * 1.22f, moveSpeed * Time.deltaTime);
+        local.gameObject.transform.localScale = new Vector3(0.35f,0.35f,0.35f);
+        yield return new WaitForSeconds(0.15f);
+        local.gameObject.transform.DOMove(transform.position + Vector3.up, moveSpeed * Time.deltaTime);
         local.gameObject.AddComponent<NodeMovement>();
         local.gameObject.GetComponent<NodeMovement>().connectedNode = transform;
         local.gameObject.tag = "Collected";
-
+        GameObject.Find("Player").GetComponent<MoneyMovement>().MoneyFixer();
+        Destroy(gameObject.GetComponent<CollectManager>());
+        
+        
     }
 }
 /*

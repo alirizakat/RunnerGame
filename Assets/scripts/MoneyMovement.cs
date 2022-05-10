@@ -34,6 +34,7 @@ public class MoneyMovement : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         transform.Translate(new Vector3(horizontal * horizontalSpeed * Time.deltaTime, 0, movementSpeed * Time.deltaTime));
     }
+    /*
     void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.CompareTag("Collect"))
@@ -41,16 +42,17 @@ public class MoneyMovement : MonoBehaviour
             MoneyFixer();
         }
     }
+    */
     IEnumerator Firing()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         Rigidbody clone;
         clone = Instantiate(projectile, spawnPoint.transform.position, transform.rotation);
         clone.velocity = transform.TransformDirection(Vector3.forward * atkSpeed);
     }
     public IEnumerator Reload()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine("Firing");
     }
     public void MoneyFixer()

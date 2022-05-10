@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 public class BuyArea : MonoBehaviour
 {
     public MoneyMovement money;
     public GameObject[] collected;
     private GameObject localPlayer;
-    public float areaCost;
+    public int areaCost;
     public GameObject walking, bike;
-    // Start is called before the first frame update
-    void Start()
-    {
+    public Image fillImage;
+    int i = 0;
+    int result;
+    float amountToAdd;
 
-    }
-
-    // Update is called once per frame
     void Update()
     {
         collected = GameObject.FindGameObjectsWithTag("Collected");
@@ -30,6 +29,8 @@ public class BuyArea : MonoBehaviour
             localPlayer.GetComponentInChildren<Animator>().speed = 0;
             if(collected.Length >= areaCost)
             {
+                result = collected.Length - areaCost;
+                amountToAdd = 1 / (float)areaCost;
                 Debug.Log("You can buy this!");
                 StartCoroutine("PayMoney");
             }
@@ -40,34 +41,25 @@ public class BuyArea : MonoBehaviour
             }
         }
     }
-    int i = 0;
+    
     IEnumerator PayMoney()
     {
-        i = collected.Length - 1;
-        Destroy(collected[i].GetComponent<NodeMovement>());
+        Destroy(collected[collected.Length - 1].GetComponent<NodeMovement>());
         GameObject local;
         local = GameObject.Find("BuySpot");
-        yield return new WaitForSeconds(0.2f);
-        collected[i].transform.DOMove(local.transform.position, 0.2f);
-        yield return new WaitForSeconds(0.2f);
-
-        if(i > 0)
-        {
-            i--;
-            localPlayer.GetComponent<MoneyMovement>().LoseMoney();
-            StartCoroutine("OtherRoutine");
-        }
-        else
+        yield return new WaitForSeconds(0.1f);
+        collected[collected.Length - 1].transform.DOMove(local.transform.position, 0.1f);
+        if(collected.Length == result)
         {
             localPlayer.GetComponent<MoneyMovement>().LoseMoney();
             BikeContinue();
         }
-        
-    }
-    IEnumerator OtherRoutine()
-    {
-        yield return new WaitForSeconds(0.1f);
-        StartCoroutine("PayMoney");
+        else
+        {
+            fillImage.fillAmount += amountToAdd;
+            localPlayer.GetComponent<MoneyMovement>().LoseMoney();
+            StartCoroutine("PayMoney");   
+        }
     }
     void BikeContinue()
     {
