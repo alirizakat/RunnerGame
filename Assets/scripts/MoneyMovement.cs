@@ -15,15 +15,12 @@ public class MoneyMovement : MonoBehaviour
     public GameObject spawnPoint;
     public float atkSpeed;
     public GameObject[] missiles;
-
-    // Start is called before the first frame update
+    bool dieOnce, canShoot;
     void Start()
     {
         moneyText.text = currentMoney + "K";
         StartCoroutine("Firing");
     }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -34,21 +31,27 @@ public class MoneyMovement : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         transform.Translate(new Vector3(horizontal * horizontalSpeed * Time.deltaTime, 0, movementSpeed * Time.deltaTime));
     }
-    /*
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.gameObject.CompareTag("Collect"))
-        {
-            MoneyFixer();
-        }
-    }
-    */
     IEnumerator Firing()
     {
-        yield return new WaitForSeconds(0.5f);
-        Rigidbody clone;
-        clone = Instantiate(projectile, spawnPoint.transform.position, transform.rotation);
-        clone.velocity = transform.TransformDirection(Vector3.forward * atkSpeed);
+        if(!canShoot)
+        {
+            yield return new WaitForSeconds(0.5f);
+            Rigidbody clone;
+            clone = Instantiate(projectile, spawnPoint.transform.position, transform.rotation);
+            clone.velocity = transform.TransformDirection(Vector3.forward * atkSpeed);
+        }
+        
+    }
+    void OnTriggerEnter(Collider collider)
+    {
+        if(collider.gameObject.CompareTag("Enemy") && !dieOnce)
+        {
+            gameObject.GetComponentInChildren<Animator>().SetTrigger("death");
+            horizontalSpeed = 0;
+            movementSpeed = 0;
+            canShoot = true;
+            dieOnce = true;
+        }
     }
     public IEnumerator Reload()
     {

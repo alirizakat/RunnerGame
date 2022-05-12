@@ -10,7 +10,6 @@ public class EnemyMove : MonoBehaviour
     public Material newMaterial;
     public GameObject mesh;
     private GameObject localPlayer;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +21,7 @@ public class EnemyMove : MonoBehaviour
     void Update()
     {
         rb.velocity = transform.TransformDirection(Vector3.back * walkSpeed);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, localPlayer.transform.rotation, Time.deltaTime * walkSpeed);
+        //transform.LookAt(GameObject.Find("Player").transform);
         if(colorChange == true) 
         {
             mesh.GetComponent<SkinnedMeshRenderer>().material = newMaterial;
